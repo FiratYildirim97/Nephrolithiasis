@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <meta charset="UTF-8">
+  <title>EAU Taş Tedavi Botu 2025</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                   "Segoe UI", sans-serif;
+      color-scheme: dark;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 45%, #000 100%);
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      min-height: 100vh;
+    }
+    .app {
+      width: 100%;
+      max-width: 520px;
+      margin: 12px;
+      padding: 16px 14px 18px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.96);
+      box-shadow: 0 22px 40px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 1.35rem;
+      margin: 0 0 4px;
+      text-align: center;
+      color: #f97316;
+      letter-spacing: 0.03em;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 0.78rem;
+      color: #9ca3af;
+      margin-bottom: 14px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15, 118, 110, 0.18);
+      border: 1px solid rgba(45, 212, 191, 0.55);
+      color: #a5f3fc;
+      margin-bottom: 10px;
+    }
+    .field-group {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      font-size: 0.86rem;
+      margin-bottom: 3px;
+      color: #e5e7eb;
+    }
+    select,
+    input[type="number"] {
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 11px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      box-sizing: border-box;
+      font-size: 0.9rem;
+    }
+    select:focus,
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.65);
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+    }
+    .row > .field-group {
+      flex: 1;
+    }
+    .hint {
+      font-size: 0.72rem;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+    .checkboxes {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .checkboxes label {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #d1d5db;
+    }
+    input[type="checkbox"] {
+      margin-top: 2px;
+      width: 14px;
+      height: 14px;
+      accent-color: #f97316;
+    }
+    button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(90deg,#f97316,#facc15);
+      color: #111827;
+      font-weight: 600;
+      font-size: 0.98rem;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+    }
+    button:active {
+      transform: translateY(1px);
+      filter: brightness(0.96);
+    }
+    .result {
+      margin-top: 14px;
+      padding: 11px 10px;
+      border-radius: 14px;
+      background: #020617;
+      border: 1px solid #1f2937;
+      font-size: 0.86rem;
+      white-space: pre-line;
+      max-height: 58vh;
+      overflow-y: auto;
+    }
+    .result-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .badge-strong {
+      background: #16a34a33;
+      color: #bbf7d0;
+      border: 1px solid #16a34a;
+    }
+    .badge-weak {
+      background: #f59e0b22;
+      color: #fed7aa;
+      border: 1px solid #f59e0b;
+    }
+    .badge-note {
+      background: #3b82f622;
+      color: #bfdbfe;
+      border: 1px solid #3b82f6;
+    }
+    .footer {
+      margin-top: 8px;
+      font-size: 0.7rem;
+      color: #6b7280;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>EAU 2025 Taş Botu</h1>
+    <div class="subtitle">
+      Üriner taşın <b>yeri + boyutuna</b> göre<br>
+      <b>EAU 2025 (ürolitiyazis)</b> algoritmasına yakın tedavi önerisi.
+    </div>
+
+    <div class="pill">
+      📌 Sadece eğitim aracı – klinik kararı tek başına belirlemez.
+    </div>
+
+    <!-- Konum ve boyut -->
+    <div class="field-group">
+      <label for="location">Taşın konumu</label>
+      <select id="location">
+        <option value="distal_ureter">Distal üreter</option>
+        <option value="proximal_ureter">Proksimal / üst üreter</option>
+        <option value="mid_ureter">Orta üreter</option>
+        <option value="kidney_non_lower">Böbrek (alt pol dışı)</option>
+        <option value="kidney_lower">Böbrek alt pol</option>
+        <option value="bladder">Mesane</option>
+        <option value="urethra">Üretra</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <div class="field-group">
+        <label for="size">Taş boyutu (mm)</label>
+        <input id="size" type="number" min="1" max="60" value="8">
+        <div class="hint">EAU: kritik eşikler 10 mm ve 20 mm.</div>
+      </div>
+      <div class="field-group">
+        <label for="side">Taraf</label>
+        <select id="side">
+          <option value="normal">Tek taraf / normal</option>
+          <option value="solitary">Soliter böbrek / bilateral taş</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Kırmızı bayraklar -->
+    <div class="field-group">
+      <label>Kırmızı bayraklar</label>
+      <div class="checkboxes">
+        <label>
+          <input type="checkbox" id="sepsis">
+          Ateş / sepsis, inatçı şiddetli ağrı, analjeziklere yanıtsız kolik
+        </label>
+        <label>
+          <input type="checkbox" id="ckd">
+          Hızlı bozulmuş böbrek fonksiyonu / ileri KBY
+        </label>
+        <label>
+          <input type="checkbox" id="pregnancy">
+          Gebelik
+        </label>
+      </div>
+      <div class="hint">
+        Bu durumlarda EAU öncelikle <b>drenaj + stabilizasyon</b> önerir, taş tedavisi ikinci basamak olur.
+      </div>
+    </div>
+
+    <button onclick="getRecommendation()">Tedaviyi Göster</button>
+
+    <div class="result" id="result">
+      Taş konumu ve boyutunu seç, kırmızı bayrakları işaretle; sonra yukarıdaki butona bas.
+    </div>
+
+    <div class="footer">
+      Kaynak: EAU Guidelines 2025 – Urolithiasis (üreter taşları için Şekil 3.1, renal taşlar için Şekil 3.2 ve ilgili metin).
+    </div>
+  </div>
+
+  <script>
+    function getRecommendation() {
+      const location = document.getElementById("location").value;
+      const side = document.getElementById("side").value;
+      const size = parseFloat(document.getElementById("size").value || "0");
+      const sepsis = document.getElementById("sepsis").checked;
+      const ckd = document.getElementById("ckd").checked;
+      const pregnancy = document.getElementById("pregnancy").checked;
+
+      let out = "";
+      let acute = "";
+      let main = "";
+      let extra = "";
+
+      // 1) KIRMIZI BAYRAK / ACİL DURUM
+      if (sepsis || ckd || side === "solitary") {
+        acute += "🚨 ACİL / YÜKSEK RİSK DURUMU\n";
+        acute += "- Öncelik: Obstrüksiyonun acil drenajı (JJ stent veya perkütan nefrostomi).\n";
+        acute += "- Uygun geniş spektrum antibiyotik, hemodinamik stabilizasyon.\n";
+        acute += "- Kesin taş tedavisi, hasta stabil olduktan sonra planlanmalı.\n\n";
+      }
+
+      if (pregnancy) {
+        acute += "🤰 GEBELİK\n";
+        acute += "- Radyasyonsuz görüntüleme (USG, gerekirse MRG) tercih et.\n";
+        acute += "- ESWL gebelikte KONTRAENDİKE.\n";
+        acute += "- Gerekirse URS veya geçici drenaj (JJ stent / nefrostomi) tercih edilir.\n\n";
+      }
+
+      // Eğer boyut saçmaysa
+      if (!size || size <= 0) {
+        document.getElementById("result").textContent =
+          "Lütfen taşın en büyük çapını mm cinsinden gir.";
+        return;
+      }
+
+      // 2) KONUMA GÖRE EAU 2025 ALGORİTMASI
+
+      // ÜRETER TAŞLARI – EAU Figür 3.1 mantığı
+      if (location === "proximal_ureter" || location === "mid_ureter" || location === "distal_ureter") {
+        const locText = location === "distal_ureter"
+          ? "Distal üreter taşı"
+          : (location === "mid_ureter" ? "Orta üreter taşı (proksimale benzer yönetim)" : "Proksimal / üst üreter taşı");
+
+        main += "📍 " + locText + "\n";
+        main += "Taş boyutu: " + size.toFixed(1) + " mm\n\n";
+
+        if (size < 10) {
+          main += "EAU 2025 – Üreter taş algoritması (Şekil 3.1):\n";
+          main += "- < 10 mm üreter taşı için: SWL veya URS her ikisi de uygun seçenek.\n";
+          main += "- Hasta ve merkez koşullarına göre seçim yap (BMI, taş yoğunluğu, anatomik faktörler, ekipman).\n";
+          main += "Öneri: SWL veya URS (eşdeğer seçenekler).\n";
+        } else {
+          if (location === "distal_ureter") {
+            main += "EAU 2025 – Distal üreter taşı (Şekil 3.1):\n";
+            main += "- > 10 mm distal üreter taşı için 1. seçenek URS, 2. seçenek SWL.\n";
+            main += "Öneri sırası:\n";
+            main += "  1️⃣ URS (semirijit / fleks)\n";
+            main += "  2️⃣ Uygun ise SWL\n";
+          } else {
+            main += "EAU 2025 – Proksimal / orta üreter taşı (Şekil 3.1):\n";
+            main += "- > 10 mm proksimal taşlarda 1. seçenek URS (ante/retrograd), 2. seçenek SWL.\n";
+            main += "Öneri sırası:\n";
+            main += "  1️⃣ URS (ante- veya retrograd)\n";
+            main += "  2️⃣ SWL\n";
+          }
+        }
+
+        extra += "\nNotlar:\n";
+        extra += "- Semptomatik küçük taşlarda uygun olguda kısa süreli konservatif yaklaşım + analjezi ve yakın takip düşünülebilir.\n";
+        extra += "- MET (alfa-bloker) sadece seçilmiş distal üreter taşlarında, kılavuzdaki kanıt düzeyi ve yan etki profili göz önünde bulundurularak değerlendirilmeli.\n";
+
+      // RENAL TAŞLAR – EAU Figür 3.2 mantığı
+      } else if (location === "kidney_non_lower" || location === "kidney_lower") {
+        const isLower = (location === "kidney_lower");
+        const locText = isLower ? "Böbrek alt pol taşı" : "Böbrek taşı (alt pol dışı)";
+
+        main += "📍 " + locText + "\n";
+        main += "Taş boyutu: " + size.toFixed(1) + " mm\n\n";
+
+        if (!isLower) {
+          // Alt pol dışı renal taş – Figür 3.2
+          if (size < 10) {
+            main += "EAU 2025 – Renal taş algoritması (Şekil 3.2):\n";
+            main += "- < 10 mm renal taşlarda: 1. seçenek SWL veya RIRS.\n";
+            main += "- 2. seçenek PCNL (özellikle komplike taş/anatomi varsa).\n";
+            main += "Öneri: SWL veya RIRS; PCNL seçilmiş olguda.\n";
+          } else if (size <= 20) {
+            main += "EAU 2025 – 10–20 mm böbrek taşı (alt pol dışı):\n";
+            main += "- SWL veya endoüroloji (RIRS / mini-PCNL) uygundur.\n";
+            main += "- Taş yükü, HU, anatomi ve hasta tercihiyle seçim yapılır.\n";
+            main += "Öneri: SWL veya endoüroloji (RIRS / mini-PCNL).\n";
+          } else {
+            main += "EAU 2025 – > 20 mm böbrek taşı (alt pol dışı):\n";
+            main += "- 1. seçenek PCNL.\n";
+            main += "- 2. seçenek RIRS veya SWL (daha fazla seans ve ek girişim gerektirebilir).\n";
+            main += "Öneri sırası:\n";
+            main += "  1️⃣ PCNL (standart / mini)\n";
+            main += "  2️⃣ RIRS veya SWL (seçilmiş olguda)\n";
+          }
+        } else {
+          // Alt pol taşı – Figür 3.2 + metin
+          if (size < 10) {
+            main += "EAU 2025 – < 10 mm alt pol taşı:\n";
+            main += "- SWL veya RIRS mümkündür; SWL başarısı anatomiye bağlı değişken.\n";
+            main += "- Uygun anatomide SWL, aksi halde RIRS tercih edilebilir.\n";
+            main += "Öneri: SWL veya RIRS (olguya göre).\n";
+          } else if (size <= 20) {
+            main += "EAU 2025 – 10–20 mm alt pol taşı:\n";
+            main += "- Kılavuz, SWL etkinliğinin sınırlı olduğunu ve çoğu vakada RIRS veya (mini)PCNL’yi ön planda tutar.\n";
+            main += "Öneri:\n";
+            main += "  1️⃣ RIRS veya mini-PCNL (endoüroloji)\n";
+            main += "  2️⃣ SWL sadece çok uygun anatomi ve düşük taş yükünde\n";
+          } else {
+            main += "EAU 2025 – > 20 mm alt pol taşı:\n";
+            main += "- PCNL ilk tercihtir.\n";
+            main += "- Gerekirse çoklu PCNL / kombine PCNL + RIRS.\n";
+            main += "Öneri: PCNL (standart / çoklu giriş). \n";
+          }
+        }
+
+        extra += "\nNotlar:\n";
+        extra += "- Asemptomatik küçük renal taşlarda EAU, seçilmiş olgularda konservatif izlem seçeneğinden bahseder.\n";
+        extra += "- Büyüyen (> 5 mm artış) veya semptomatik taşlarda aktif tedavi düşün.\n";
+        extra += "- Taş kompozisyonu (HU, önceki analiz) seçilecek yöntemi etkiler (örneğin çok sert taşlarda SWL başarısı düşük).\n";
+
+      // MESANE TAŞI – özet yaklaşım
+      } else if (location === "bladder") {
+        main += "📍 Mesane taşı\n";
+        main += "Taş boyutu: " + size.toFixed(1) + " mm\n\n";
+        main += "- Yetişkinde standart yaklaşım: transüretral sistolitotripsi (rijit / fleks sistoskopi ile endoskopik taş kırma).\n";
+        main += "- Çok büyük taşlarda veya ek patolojide (dev prostat, divertikül, çocuk vb.) açık / laparoskopik yaklaşımlar gerekebilir.\n";
+        main += "Öneri: Transüretral sistolitotripsi birinci seçenek, özel durumlarda cerrahi alternatifler.\n";
+        extra += "\nNot: Eşlik eden BOO/BPH tedavisi ve nüks profilaksisi planlanmalı.\n";
+
+      // ÜRETRA TAŞI – özet yaklaşım
+      } else if (location === "urethra") {
+        main += "📍 Üretra taşı\n";
+        main += "Taş boyutu: " + size.toFixed(1) + " mm\n\n";
+        main += "- Çoğu olguda taş önce mesaneye itilip ardından sistolitotripsi uygulanır.\n";
+        main += "- Alternatif olarak, uygun çapta endoskopla doğrudan üretradan parçalama yapılabilir.\n";
+        main += "- Amaç: üretra travmasını ve striktür riskini minimalize etmek.\n";
+        main += "Öneri: Endoskopik yaklaşım ± taşın mesaneye itilmesi + sistolitotripsi.\n";
+        extra += "\nNot: Taş boyutu ve lokalizasyonuna göre üretra cerrahisi ve/veya ek rekonstrüksiyon planlaması gerekebilir.\n";
+      }
+
+      // 3) Sonuç çıktısını birleştir
+      out += acute;
+      if (main) {
+        out += main + "\n";
+      }
+      if (extra) {
+        out += extra;
+      }
+
+      if (!out.trim()) {
+        out = "Bir şeyler ters gitti, girdi değerlerini kontrol et.";
+      }
+
+      document.getElementById("result").textContent = out;
+    }
+  </script>
+</body>
+</html>
